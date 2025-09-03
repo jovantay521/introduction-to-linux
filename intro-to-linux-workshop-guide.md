@@ -1,19 +1,20 @@
-*Author: Tay Jovan*
-*Last Updated: 2025/09/03*
+*Author: Tay Jovan*  
+*Last Updated: 2025/09/03*  
+
 # Intro to Linux Workshop Guide
 
 ## 0. Outline
 
-[[#1. Introduction & Setup]]
-[[#2. The Command Line]]
-[[#3. Files & Directories]]
-[[#4. Users, Permissions & Ownership]]
-[[#5. Processes & System Monitoring]]
-[[#6. Software Management]]
-[[#7. Redirection, Pipes & Text Processing]]
-[[#8. Networking & Remote Access]]
-[[#9. Next Steps]]
-[[#10. References]]
+[1. Introduction & Setup](#1-introduction--setup)  
+[2. The Command Line](#2-the-command-line)  
+[3. Files & Directories](#3-files--directories)  
+[4. Users, Permissions & Ownership](#4-users-permissions--ownership)  
+[5. Processes & System Monitoring](#5-processes--system-monitoring)  
+[6. Software Management](#6-software-management)  
+[7. Redirection, Pipes & Text Processing](#7-redirection-pipes--text-processing)  
+[8. Networking & Remote Access](#8-networking--remote-access)  
+[9. Next Steps](#9-next-steps)  
+[10. References](#10-references)  
 
 ## 1. Introduction & Setup
 
