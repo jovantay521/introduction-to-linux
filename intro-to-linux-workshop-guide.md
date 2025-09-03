@@ -23,7 +23,7 @@
 
 Open source is source code that is made freely available for possible modification and redistribution. That means anyone can view it, modify it and create new distributions for it.
 
-![[linux-distribution-timeline.svg]]
+![](images/linux-distribution-timeline.svg)
 
 What is unix?
 What is a kernel?
@@ -90,7 +90,7 @@ A terminal is the software application that provides a text-based interface to i
 
 The shell is the program that interprets and executes commands typed by the user. On Ubuntu, we are using [Bash](https://www.gnu.org/software/bash/) (Bourne Again Shell) and on Mac OS, it is [ZSH](https://zsh.sourceforge.io/) (Z Shell).
 
-![[Untitled-2025-09-02-2207.png]]
+![](images/terminal-shell-diagram.png)
 
 ### 2.2. Basic Commands
 
@@ -126,7 +126,7 @@ cd
 
 If we don't specify a directory, by default the system will return us to our home directory (`/home/$USER`).
 
-![[directory-diagram.png]]
+![](images/directory-diagram.png)
 
 To change to the parent directory:
 
@@ -324,7 +324,7 @@ Let's breakdown the output:
 
 ### 4.1. Users, Groups & Root
 
-![[user-group-root-diagram.png]]
+![](images/user-group-root-diagram.png)
 
 We will use a company to breakdown Users, Groups and the Root user.
 
@@ -338,7 +338,7 @@ The root user represents the system administrator. Root can:
 - Manage users and groups.
 - Control system processes and settings.
 
-![[thanos.jpg]]
+![](images/thanos.jpg)
 
 To see which user you are currently logged in as:
 
@@ -443,9 +443,9 @@ cat moby-dick.txt
 cat: moby-dick.txt: Permission denied
 ```
 
-![[file-permissions-2-diagram.webp]]
+![](images/file-permissions-2-diagram.webp)
 
-![[file-permissions-diagram.webp]] 
+![](images/file-permissions-diagram.webp)
 
 Let's add ourselves to the `book-club` as well:
 
