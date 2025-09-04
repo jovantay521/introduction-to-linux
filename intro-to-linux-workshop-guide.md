@@ -1,7 +1,7 @@
-*Author: Tay Jovan*  
-*Last Updated: 2025/09/03*  
-
 # Intro to Linux Workshop Guide
+
+*Author: Tay Jovan*  
+*Last Updated: 2025/09/04*  
 
 ## 0. Outline
 
@@ -26,13 +26,15 @@ Open source is source code that is made freely available for possible modificati
 
 ![](images/linux-distribution-timeline.svg)
 
-What is unix?
-What is a kernel?
+> Unix is a family of multitasking, multi-user computer operating systems that derive from the original AT&T Unix ([Wikipedia](https://en.wikipedia.org/wiki/Unix))
 
+![](images/kernel-layout.svg)
+
+> A kernel is a computer program at the core of a computer's operating system that always has complete control over everything in the system. ([Wikipedia](https://en.wikipedia.org/wiki/Kernel_(operating_system)))
 ### 1.2. Setting Up Linux
 #### 1.2.1. Windows Subsystem for Linux (WSL)
 
->  The Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu, OpenSUSE, Kali, Debian, Arch Linux, etc) and use Linux applications, utilities, and Bash command-line tools directly on Windows, unmodified, without the overhead of a traditional virtual machine or dualboot setup.
+>  The Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu, OpenSUSE, Kali, Debian, Arch Linux, etc) and use Linux applications, utilities, and Bash command-line tools directly on Windows, unmodified, without the overhead of a traditional virtual machine or dualboot setup. ([Microsoft](https://learn.microsoft.com/en-us/windows/wsl/install))
 
 Installation command:
 
@@ -505,52 +507,365 @@ vim moby-dick.txt
 ```
 
 ## 5. Processes & System Monitoring
-Running and killing processes
 
-ps, top, htop, kill
+### 5.1. View Running Processes
 
-Foreground vs. background jobs
+On most operating systems, multiple processes will be running at the same time. On windows, we would use the task manager to view, start and kill processes. On Linux, we can achieve the same using the CLI.
 
-&, jobs, fg, bg
+To view running processes we will use `ps` with the `-a` flag:
+
+```
+ps -a
+```
+
+```
+jovan@jovan-laptop:~$ ps -a
+    PID TTY          TIME CMD
+    393 pts/1    00:00:00 bash
+    412 pts/0    00:00:00 ps
+```
+
+Let's breakdown the output:
+- `PID`: Process ID
+- `TTY`: teletypewriter (how old machines physically interact with mainframes back in the day)
+- `TIME`: total CPU time process has used since it started
+- `CMD`: program being run
+
+### 5.2. Live Monitoring
+
+If we want to monitor processes in real time, we can use `top` or `htop`:
+
+```
+top
+```
+
+or
+
+```
+htop
+```
+
+### 5.3. Foreground & Background Jobs
+
+By default commands run in the foreground:
+
+```
+sleep 300
+```
+
+While the sleep timer is running, you can't write anything in terminal. So instead, we can run the command in the background:
+
+```
+sleep 300 &
+```
+
+To view background jobs:
+
+```
+jobs
+```
+
+To bring it to the foreground
+
+```
+fg %1
+```
+
+To pause the process, we can use the shortcut `ctrl + z`.
+
+Then send it to the background:
+
+```
+bg %1
+```
+
+### 5.4. Killing Processes
+
+Let's kill the sleep process, we need to find its `PID`:
+
+```
+ps -a | grep sleep
+```
+
+```
+jovan@jovan-laptop:~$ ps -a | grep sleep
+    527 pts/0    00:00:00 sleep
+```
+
+Now we can kill the process by specifying its `PID`:
+
+```
+kill <PID>
+```
+
+Some processes can't be killed normally (system processes). In such situations, we use the `-9` flag to force kill it:
+
+```
+kill -9 <PID>
+```
 
 ## 6. Software Management
 
 ### 6.1. Package Managers
 
-### 6.1.2 Updating, Installing, Removing Software
+In modern distributions like Ubuntu, we can manage applications via the store similar to the Microsoft Store on Windows and App Store on MacOS. However, it is suggested to manage software through package managers.
 
-update packages
+A package manager is a tool that installs software packages, resolve dependencies and keep track of updates. Some examples include:
+- Debian/Ubuntu: `apt`
+- Fedora: `dnf`
+- Arch Linux: `pacman`
+- Windows: `winget`
+- MacOS: `homebrew`
+### 6..2 Updating, Installing, Removing Software
+
+We really should have started off with this section before proceeding with the rest of the guide. Unlike Windows, your system does not update automatically. Therefore, it is highly recommended to update your packages regularly, especially right after installation. This ensures you always have the latest versions of your packages.
 
 ```
 sudo apt update
 ```
 
+This command downloads the latest list of available packages and versions from repositories. A common misconception is that your software is simultaneously upgraded. However, we actually need to run a separate command to do so:
+
 ```
 sudo apt upgrade
 ```
 
+We can run both commands simultaneously:
+
 ```
-sudo apt install neofetch cowsay
+sudo apt update && sudo apt upgrade -y
+```
+
+Now that our packages are updated, let's install some fun packages:
+
+```
+sudo apt install neofetch cowsay -y
+```
+
+Try out the following commands yourselves:
+	
+```
+neofetch
+```
+
+```
+cowsay hi
+```
+
+Now we had our fun, let's remove the packages:
+
+```
+sudo apt remove neofetch cowsay -y
 ```
 
 ## 7. Redirection, Pipes & Text Processing
 
+### 7.1. Input/Output Redirection
+
+By default:
+- Input comes from the keyboard.
+- Output goes to the terminal.
+- Errors also go to the terminal
+
+We can redirect these streams. We will use our `moby-dick.txt` to demonstrate:
+
+To append a line to the file:
+
+```
+echo "hello world" >> moby-dick.txt
+```
+
+To count the number of lines in file:
+
+```
+wc -l < moby-dick.txt
+```
+
+To overwrite the entire file:
+
+```
+# we make a copy first
+cp moby-dick.txt moby-dick-copy.txt
+echo "thanos snap" > moby-dick-copy.txt
+```
+
+### 7.2. Piping
+
+As implied by the name, we connect the output of one command to the input of another:
+
+```
+cat moby-dick.txt | wc -l
+```
+
+### 7.3. Useful Text Processing Tools
+
+To search text by a pattern, we can use `grep`:
+
+```
+grep whale moby-dick.txt
+```
+
+To count lines, words, characters, we can use `wc`
+
+To count words:
+
+```
+wc -w moby-dick.txt
+```
+
+To count lines:
+
+```
+wc -l moby-dick.txt
+```
+
+To count characters:
+
+```
+wc -c moby-dick.txt
+```
+
+To sort lines sort lines alphabetically or numerically:
+
+```
+sort moby-dick.txt
+```
+
+To remove the duplicate lines:
+
+```
+uniq moby-dick.txt
+```
+
+Now that didn't actually do anything since we expect a book not to have duplicate lines, so let's try combine the tools to find the most common IP addresses in a logfile:
+
+We will demonstrate using a example log file from elastic:
+
+```
+curl -o access.log https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/apache_logs/apache_logs
+```
+
+```
+awk '{print $1}' access.log | sort | uniq -c | sort -nr | head
+```
+
+The command might look intimidating, so let's break it down:
+- `awk`: text processing tool that breaks text up into fields
+- `sort`: groups identical IPs together (`uniq` only removes **consecutive** duplicate)
+- `uniq -c`: removes duplicates and appends the count occurences
+- `sort -nr`: sort by count numerically and descending
+- `head`: shows the top 10
+
 ## 8. Networking & Remote Access
 
-ip
-ping
-curl
-ssh -> ssh into my personal server
+Once in awhile, you may need to check and troubleshoot your internet connection. Linux has built-in tools to help you perform these checks.
 
+To check your current IP address:
+
+```
+ip a
+```
+
+```
+jovan@jovan-laptop:~$ ip addr
+...
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1280 qdisc mq state UP group default qlen 1000
+    link/ether 00:15:5d:76:71:20 brd ff:ff:ff:ff:ff:ff
+    inet 172.19.156.32/20 brd 172.19.159.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::215:5dff:fe76:7120/64 scope link
+       valid_lft forever preferred_lft forever
+```
+
+- `inet`: IPv4 address
+- `inet6`: IPv6 address
+- `state UP`: interface is active
+
+If you suspect that you are disconnected from the internet, you can test connectivity with `ping`:
+
+```
+ping google.com
+```
+
+Note: on school internet, request may be blocked to prevent malicious activity
+
+To make a web request, we can use `curl`:
+
+```
+curl example.com
+```
+
+To save the content into a file (basically downloading the file):
+
+```
+curl -o example.html example.com
+```
+
+If you have a personal server, you can establish a secure connection to it via `ssh`:
+
+```
+ssh <username>@<server-ip>
+```
+
+Then to exit the server session:
+
+```
+exit
+```
 ## 9. Next Steps
 
-man
-searching online, chatgpt
-linux journey, ubuntu docs, OverTheWire Wargames
-q&a
+### 9.1. Recap
+
+We gone through a lot of content in this guide so let's do a quick recap:
+- [2. The Command Line](#2-the-command-line): `pwd`, `ls`, `cd`, `man`
+- [3. Files & Directories](#3-files--directories): `touch`, `cp`, `rm`, `mkdir`, `rmdir`
+- [4. Users, Permissions & Ownership](#4-users-permissions--ownership): `whoami`, `id`, `sudo`, `chown`, `chmod`
+- [5. Processes & System Monitoring](#5-processes--system-monitoring): `ps`, `top`, `htop`, `kill`, `fg`, `bg`
+- [6. Software Management](#6-software-management): `apt`
+- [7. Redirection, Pipes & Text Processing](#7-redirection-pipes--text-processing): `cat`, `less`, `head`, `tail`, `grep`, `awk`, `sort`, `uniq`, `wc`
+- [8. Networking & Remote Access](#8-networking--remote-access): `ip`, `ping`, `curl`, `ssh`
+
+### 9.2. Best Practices
+
+Use the `man` pages. People often use the phrase RTFM ("Read The Friendly Manual") when a common beginner question is asked. Every command has a built-in manual, and often includes interesting information that you wouldn't find otherwise.
+
+However, using `man` every time you get stuck can get time-consuming and inefficient.  In such cases, you can search online:
+- ChatGPT
+- StackOverflow
+- Forums
+- Reddit
+
+But don't accept information wholesale, reference multiple sources and test the commands first. 
+
+Case in point:
+
+```
+echo "bye bye system"
+# rm -rf /
+```
+
+Break down problems into small commands before piping them together. Verify at each step to make sure you know what the commands are actually performing, don't copy and paste scripts and expect everything to be fine.
+
+### 9.3. Recommended Resources
+
+- **Linux Journey** – beginner-friendly interactive tutorials (linuxjourney.com)
+- **The Linux Documentation Project (tldp.org)** – in-depth guides and HOWTOs ([tldp.org](https://tldp.org?utm_source=chatgpt.com))
+- **Distribution-specific docs** – e.g., [Ubuntu Docs](https://help.ubuntu.com?utm_source=chatgpt.com), Arch Wiki
+- OverTheWire Wargames → hands-on Linux and security exercises
 
 ## 10. References
 
+- [ChatGPT](chatgpt.com)
+- https://en.wikipedia.org/wiki/Linux
+- https://en.wikipedia.org/wiki/List_of_Linux_distributions#/media/File:Linux_Distribution_Timeline.svg
+- https://en.wikipedia.org/wiki/Unix
+- https://en.wikipedia.org/wiki/Kernel_(operating_system)#/media/File:Kernel_Layout.svg
+- https://en.wikipedia.org/wiki/Kernel_(operating_system)
+- https://www.gnu.org/software/bash/
+- https://zsh.sourceforge.io/
+- https://wallpapers.com/wallpapers/marvel-villain-thanos-qw0tzjg9vqkn0ju7.html
 - https://linuxhandbook.com/linux-file-permissions/
-- 
-
+- https://medium.com/@kuldeepkumawat195/how-to-set-file-permissions-in-linux-128894df3eef
+- https://medium.com/@tejasmane485/linux-file-permissions-easy-explained-21daae678211
+- https://www.gutenberg.org/ebooks/2701
+- https://github.com/elastic/examples
