@@ -1,7 +1,7 @@
 # Intro to Linux Workshop Guide
 
 *Author: Tay Jovan*  
-*Last Updated: 2025/09/04*  
+*Last Updated: 2025/09/07*  
 
 ## 0. Outline
 
@@ -36,6 +36,16 @@ Open source is source code that is made freely available for possible modificati
 
 >  The Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu, OpenSUSE, Kali, Debian, Arch Linux, etc) and use Linux applications, utilities, and Bash command-line tools directly on Windows, unmodified, without the overhead of a traditional virtual machine or dualboot setup. ([Microsoft](https://learn.microsoft.com/en-us/windows/wsl/install))
 
+_Note: If you run into errors regarding WSL features not enabled, run these commands and restart before rerunning the installation command:_
+
+```
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+```
+
+```
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
+
 Installation command:
 
 ```
@@ -49,6 +59,8 @@ Enter new UNIX username: jovan
 ```
 
 It will then prompt you to create a new password:
+
+(Note: the password field will remain empty while you type, however it is recording your input)
 
 ```
 New password: password
