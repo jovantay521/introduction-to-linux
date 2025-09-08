@@ -24,8 +24,6 @@
 
 Open source is source code that is made freely available for possible modification and redistribution. That means anyone can view it, modify it and create new distributions for it.
 
-![](images/linux-distribution-timeline.svg)
-
 > Unix is a family of multitasking, multi-user computer operating systems that derive from the original AT&T Unix ([Wikipedia](https://en.wikipedia.org/wiki/Unix))
 
 ![](images/kernel-layout.svg)
