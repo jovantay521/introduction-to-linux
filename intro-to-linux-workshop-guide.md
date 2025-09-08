@@ -1,7 +1,7 @@
 # Intro to Linux Workshop Guide
 
 *Author: Tay Jovan*  
-*Last Updated: 2025/09/07*  
+*Last Updated: 2025/09/08*  
 
 ## 0. Outline
 
@@ -55,7 +55,7 @@ wsl --install
 System will prompt you to enter your username:
 
 ```
-Enter new UNIX username: jovan
+Enter new UNIX username: <username>
 ```
 
 It will then prompt you to create a new password:
@@ -63,13 +63,13 @@ It will then prompt you to create a new password:
 (Note: the password field will remain empty while you type, however it is recording your input)
 
 ```
-New password: password
+New password: <password>
 ```
 
 Retype your password you just set:
 
 ```
-Retype new password: password
+Retype new password: <password>
 ```
 
 Once successfully installed, you should see a message similar to this:
@@ -408,19 +408,19 @@ Is the information correct? [Y/n] y
 Let's create a new group for our book club:
 
 ```
-sudo groupadd book-club
+sudo groupadd bookclub
 ```
 
-Add alice to the `book-club`
+Add alice to the `bookclub`
 
 ```
-sudo usermod -aG book-club alice
+sudo usermod -aG bookclub alice
 ```
 
-we can verify that `alice` is now part of `book-club`:
+we can verify that `alice` is now part of `bookclub`:
 
 ```
-groups
+groups alice
 ```
 
 ### 4.2. File Permissions
@@ -435,17 +435,27 @@ ls -l moby-dick.txt
 -rw-r--r-- 1 jovan jovan 1256529 Jan 19  2025 moby-dick.txt
 ```
 
-Let's change the group ownership of the book to `book-club` and user ownership to `alice`:
+Let's change the group ownership of the book to `bookclub` and user ownership to `alice`:
 
 ```
-sudo chown :book-club moby-dick.txt
+sudo chown :bookclub moby-dick.txt
 sudo chown alice moby-dick.txt
 ```
 
 To verify that ownership has been changed:
 
 ```
--rw-r--r-- 1 alice book-club 1256529 Jan 19  2025 moby-dick.txt
+-rw-r--r-- 1 alice bookclub 1256529 Jan 19  2025 moby-dick.txt
+```
+
+![](images/file-permissions-2-diagram.webp)
+
+![](images/file-permissions-diagram.webp)
+
+Let's disable read access for others:
+
+```
+sudo chmod 640 moby-dick.txt
 ```
 
 Let's try reading the file now:
@@ -458,14 +468,22 @@ cat moby-dick.txt
 cat: moby-dick.txt: Permission denied
 ```
 
-![](images/file-permissions-2-diagram.webp)
-
-![](images/file-permissions-diagram.webp)
-
-Let's add ourselves to the `book-club` as well:
+Let's add ourselves to the `bookclub` as well:
 
 ```
-sudo usermod -aG book-club $USER
+sudo usermod -aG bookclub $USER
+```
+
+Start a new session for it to take effect:
+
+```
+su - $USER
+```
+
+Verify that we are part of `bookclub` group:
+
+```
+groups
 ```
 
 Now we should be able to read the file again:
@@ -488,13 +506,13 @@ or
 vim moby-dick.txt 
 ```
 
-The text editor informs us that the file is read-only. This is because as seen earlier, the group `book-club` only has read permissions.
+The text editor informs us that the file is read-only. This is because as seen earlier, the group `bookclub` only has read permissions.
 
 ```
--rw-r--r-- 1 alice book-club 1256529 Jan 19  2025 moby-dick.txt
+-rw-r--r-- 1 alice bookclub 1256529 Jan 19  2025 moby-dick.txt
 ```
 
-Let's give book-club members write permission as well:
+Let's give bookclub members write permission as well:
 
 ```
 sudo chmod 660 moby-dick.txt
